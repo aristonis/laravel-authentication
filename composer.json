@@ -1,0 +1,51 @@
+{
+    "name": "aristonis/laravel-authentication",
+    "description": "Laravel Authentication Package",
+    "type": "library",
+    "require": {
+        "php": "^8.3",
+        "laravel/framework": "^12.0|^13.0",
+        "laravel/sanctum": "^4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "orchestra/testbench": "^9.0|^10.0",
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.0",
+        "pestphp/pest-plugin-arch": "^3.0",
+        "mockery/mockery": "^1.6",
+        "larastan/larastan": "^3.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aristonis"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Aristonis\\LaravelAuthentication\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aristonis\\LaravelAuthentication\\Tests\\": "tests/",
+            "Aristonis\\LaravelAuthentication\\Tests\\Database\\Factories\\": "tests/Database/factories/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aristonis\\LaravelAuthentication\\AuthenticationServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
