@@ -7,10 +7,20 @@ namespace Aristonis\LaravelAuthentication;
 use Aristonis\LaravelAuthentication\Actions\Login\Events\LoginFailedEvent;
 use Aristonis\LaravelAuthentication\Actions\Login\Events\LoginSuccessEvent;
 use Aristonis\LaravelAuthentication\Actions\Register\Events\UserRegisteredEvent;
+use Aristonis\LaravelAuthentication\Actions\ForgotPassword\Events\PasswordResetLinkSentEvent;
+use Aristonis\LaravelAuthentication\Actions\ResetPassword\Events\PasswordResetEvent;
+use Aristonis\LaravelAuthentication\Actions\VerifyEmail\Events\EmailVerifiedEvent;
+use Aristonis\LaravelAuthentication\Actions\Logout\Events\UserLoggedOutEvent;
+use Aristonis\LaravelAuthentication\Actions\ChangePassword\Events\PasswordChangedEvent;
+use Aristonis\LaravelAuthentication\Actions\RefreshToken\Events\TokenRefreshedEvent;
+use Aristonis\LaravelAuthentication\Contracts\PasswordValidatorInterface;
 use Aristonis\LaravelAuthentication\Contracts\TokenServiceInterface;
+use Aristonis\LaravelAuthentication\Contracts\UserCreatorInterface;
 use Aristonis\LaravelAuthentication\Contracts\UserIdentifierInterface;
 use Aristonis\LaravelAuthentication\Identification\IdentifierFactory;
 use Aristonis\LaravelAuthentication\Identification\UserIdentifier;
+use Aristonis\LaravelAuthentication\Services\DefaultPasswordValidator;
+use Aristonis\LaravelAuthentication\Services\DefaultUserCreator;
 use Aristonis\LaravelAuthentication\Services\RateLimitService;
 use Aristonis\LaravelAuthentication\Services\TokenService;
 use Illuminate\Config\Repository;
@@ -68,6 +78,34 @@ class AuthenticationServiceProvider extends ServiceProvider
                 return $factory->create();
             }
         );
+
+        // User Creator - supports extension via config
+        $this->app->bind(
+            UserCreatorInterface::class,
+            function ($app) {
+                $customClass = config('auth-package.registration.user_creator');
+                
+                if ($customClass && class_exists($customClass)) {
+                    return $app->make($customClass);
+                }
+                
+                return $app->make(DefaultUserCreator::class);
+            }
+        );
+
+        // Password Validator - supports extension via config
+        $this->app->bind(
+            PasswordValidatorInterface::class,
+            function ($app) {
+                $customClass = config('auth-package.registration.password_validator');
+                
+                if ($customClass && class_exists($customClass)) {
+                    return $app->make($customClass);
+                }
+                
+                return $app->make(DefaultPasswordValidator::class);
+            }
+        );
     }
 
     private function registerEventListeners(): void
@@ -95,6 +133,54 @@ class AuthenticationServiceProvider extends ServiceProvider
         foreach ($config->get('auth-package.events.login_failed', []) as $listener) {
             $events->listen(
                 LoginFailedEvent::class,
+                $listener
+            );
+        }
+
+        // PasswordResetLinkSentEvent
+        foreach ($config->get('auth-package.events.password_reset_link_sent', []) as $listener) {
+            $events->listen(
+                PasswordResetLinkSentEvent::class,
+                $listener
+            );
+        }
+
+        // PasswordResetEvent
+        foreach ($config->get('auth-package.events.password_reset', []) as $listener) {
+            $events->listen(
+                PasswordResetEvent::class,
+                $listener
+            );
+        }
+
+        // EmailVerifiedEvent
+        foreach ($config->get('auth-package.events.email_verified', []) as $listener) {
+            $events->listen(
+                EmailVerifiedEvent::class,
+                $listener
+            );
+        }
+
+        // UserLoggedOutEvent
+        foreach ($config->get('auth-package.events.user_logged_out', []) as $listener) {
+            $events->listen(
+                UserLoggedOutEvent::class,
+                $listener
+            );
+        }
+
+        // PasswordChangedEvent
+        foreach ($config->get('auth-package.events.password_changed', []) as $listener) {
+            $events->listen(
+                PasswordChangedEvent::class,
+                $listener
+            );
+        }
+
+        // TokenRefreshedEvent
+        foreach ($config->get('auth-package.events.token_refreshed', []) as $listener) {
+            $events->listen(
+                TokenRefreshedEvent::class,
                 $listener
             );
         }

@@ -12,16 +12,7 @@
     <testsuites>
         <testsuite name="Unit">
             <directory>tests/Actions</directory>
-            <directory>tests/Services</directory>
-            <directory>tests/DTOs</directory>
-            <directory>tests/Contracts</directory>
-        </testsuite>
-        <testsuite name="Integration">
-            <directory>tests/Integration</directory>
-            <directory>tests/Events</directory>
-        </testsuite>
-        <testsuite name="Pattern">
-            <directory>tests/Patterns</directory>
+            <directory>tests/Unit</directory>
         </testsuite>
     </testsuites>
     <source>
