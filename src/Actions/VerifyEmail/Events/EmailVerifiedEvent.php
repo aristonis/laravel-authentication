@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
  * Event dispatched when a user successfully verifies their email.
  *
  * Listeners can be configured in config:
- * - auth-package.events.email_verified
+ * - laravel-authentication.events.email_verified
  *
  * Use Cases:
  * - Send welcome email

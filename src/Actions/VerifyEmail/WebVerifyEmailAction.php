@@ -28,7 +28,7 @@ class WebVerifyEmailAction extends AbstractVerifyEmailAction
         Authenticatable $user,
         VerifyEmailDto $dto
     ): VerifyEmailResult {
-        $redirectUrl = config('auth-package.email.verified_redirect_url', '/dashboard');
+        $redirectUrl = config('laravel-authentication.email.verified_redirect_url', '/dashboard');
 
         return new VerifyEmailResult(
             success: true,

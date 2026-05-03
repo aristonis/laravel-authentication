@@ -35,8 +35,8 @@ class ApiRefreshTokenAction extends AbstractRefreshTokenAction
         // Create new token
         $newToken = $this->tokenService->createToken(
             $user,
-            config('auth-package.sanctum.token_name', 'api'),
-            config('auth-package.sanctum.abilities', ['*']),
+            config('laravel-authentication.sanctum.token_name', 'api'),
+            config('laravel-authentication.sanctum.abilities', ['*']),
             $expiresAt
         );
 

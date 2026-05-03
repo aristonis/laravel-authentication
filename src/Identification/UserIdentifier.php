@@ -55,6 +55,6 @@ class UserIdentifier implements UserIdentifierInterface
      */
     protected function getFields(): array
     {
-        return $this->config->get('auth-package.identification.fields', ['email']);
+        return $this->config->get('laravel-authentication.identification.fields', ['email']);
     }
 }

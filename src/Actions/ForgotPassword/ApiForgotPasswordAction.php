@@ -39,7 +39,7 @@ class ApiForgotPasswordAction extends AbstractForgotPasswordAction
 
         // For API, return token directly (allows client to handle reset flow)
         // In production, you might want to send email anyway and return generic message
-        $returnToken = config('auth-package.api.return_reset_token', false);
+        $returnToken = config('laravel-authentication.api.return_reset_token', false);
 
         return new ForgotPasswordResult(
             success: true,

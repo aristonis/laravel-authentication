@@ -124,7 +124,7 @@ abstract class AbstractRegisterAction
         }
 
         // Additional validation using Laravel validator
-        $validationRules = config('auth-package.registration.validation', [
+        $validationRules = config('laravel-authentication.registration.validation', [
             'email' => ['required', 'email'],
             'name' => ['nullable', 'string', 'max:255'],
         ]);

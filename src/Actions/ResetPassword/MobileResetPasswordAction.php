@@ -29,14 +29,14 @@ class MobileResetPasswordAction extends AbstractResetPasswordAction
         ResetPasswordDto $dto
     ): ResetPasswordResult {
         // Calculate expiration
-        $expiresInMinutes = config('auth-package.mobile.token_expiry_minutes', 525600); // 1 year default
+        $expiresInMinutes = config('laravel-authentication.mobile.token_expiry_minutes', 525600); // 1 year default
         $expiresAt = now()->addMinutes($expiresInMinutes);
 
         // Create new token with expiration
         $token = $this->tokenService->createToken(
             $user,
-            config('auth-package.mobile.token_name', 'mobile'),
-            config('auth-package.mobile.abilities', ['*']),
+            config('laravel-authentication.mobile.token_name', 'mobile'),
+            config('laravel-authentication.mobile.abilities', ['*']),
             $expiresAt
         );
 

@@ -29,14 +29,14 @@ class MobileRefreshTokenAction extends AbstractRefreshTokenAction
         RefreshTokenDto $dto
     ): RefreshTokenResult {
         // Calculate expiration (mobile-specific)
-        $expiresInMinutes = config('auth-package.mobile.token_expiry_minutes', 525600); // 1 year default
+        $expiresInMinutes = config('laravel-authentication.mobile.token_expiry_minutes', 525600); // 1 year default
         $expiresAt = now()->addMinutes($expiresInMinutes);
 
         // Create new token with mobile-specific settings
         $newToken = $this->tokenService->createToken(
             $user,
-            config('auth-package.mobile.token_name', 'mobile'),
-            config('auth-package.mobile.abilities', ['*']),
+            config('laravel-authentication.mobile.token_name', 'mobile'),
+            config('laravel-authentication.mobile.abilities', ['*']),
             $expiresAt
         );
 
@@ -52,6 +52,6 @@ class MobileRefreshTokenAction extends AbstractRefreshTokenAction
      */
     protected function getTokenExpiryMinutes(): int
     {
-        return config('auth-package.mobile.token_expiry_minutes', 525600);
+        return config('laravel-authentication.mobile.token_expiry_minutes', 525600);
     }
 }

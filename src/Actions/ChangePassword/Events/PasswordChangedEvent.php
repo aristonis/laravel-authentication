@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
  * Event dispatched when a user successfully changes their password.
  *
  * Listeners can be configured in config:
- * - auth-package.events.password_changed
+ * - laravel-authentication.events.password_changed
  *
  * Use Cases:
  * - Send password changed confirmation email

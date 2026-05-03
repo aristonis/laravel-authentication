@@ -161,6 +161,6 @@ abstract class AbstractRefreshTokenAction
      */
     protected function getTokenExpiryMinutes(): int
     {
-        return config('auth-package.sanctum.token_expiry_minutes', 525600); // 1 year default
+        return config('laravel-authentication.sanctum.token_expiry_minutes', 525600); // 1 year default
     }
 }

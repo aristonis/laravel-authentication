@@ -56,7 +56,7 @@ class WebForgotPasswordAction extends AbstractForgotPasswordAction
         $resetUrl = $this->generateResetUrl($resetToken, $user->email);
 
         // Use Laravel's built-in password reset notification or custom mailable
-        $mailableClass = config('auth-package.email.forgot_password_mailable');
+        $mailableClass = config('laravel-authentication.email.forgot_password_mailable');
 
         if ($mailableClass && class_exists($mailableClass)) {
             Mail::to($user->email)->send(new $mailableClass($user, $resetToken, $resetUrl));
@@ -75,8 +75,8 @@ class WebForgotPasswordAction extends AbstractForgotPasswordAction
      */
     protected function generateResetUrl(string $token, string $email): string
     {
-        $baseUrl = config('auth-package.password_reset.frontend_url', config('app.url'));
-        $route = config('auth-package.password_reset.route', '/password-reset');
+        $baseUrl = config('laravel-authentication.password_reset.frontend_url', config('app.url'));
+        $route = config('laravel-authentication.password_reset.route', '/password-reset');
 
         return sprintf(
             '%s%s?token=%s&email=%s',

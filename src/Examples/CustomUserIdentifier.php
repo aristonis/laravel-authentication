@@ -23,7 +23,7 @@ use Aristonis\LaravelAuthentication\Identification\UserIdentifier;
 // OPTION 1: Config-Based (Simplest)
 // ============================================================================
 //
-// In your config/auth-package.php:
+// In your config/laravel-authentication.php:
 //
 // 'identification' => [
 //     'fields' => ['email', 'username', 'phone'],
@@ -101,7 +101,7 @@ class CustomUserIdentifier extends UserIdentifier implements UserIdentifierInter
 //     );
 // }
 //
-// Or in config/auth-package.php:
+// Or in config/laravel-authentication.php:
 //
 // 'identification' => [
 //     'fields' => ['email'],  // Ignored when custom is set

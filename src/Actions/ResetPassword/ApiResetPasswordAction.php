@@ -31,8 +31,8 @@ class ApiResetPasswordAction extends AbstractResetPasswordAction
         // Create new Sanctum token
         $token = $this->tokenService->createToken(
             $user,
-            config('auth-package.sanctum.token_name', 'password_reset'),
-            config('auth-package.sanctum.abilities', ['*'])
+            config('laravel-authentication.sanctum.token_name', 'password_reset'),
+            config('laravel-authentication.sanctum.abilities', ['*'])
         );
 
         return new ResetPasswordResult(

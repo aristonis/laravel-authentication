@@ -25,6 +25,8 @@ interface TokenServiceInterface
 
     /**
      * Find a token by its raw token string.
+     *
+     * @return object|null The token object or null if not found
      */
-    public function findToken(string $token): ?\Laravel\Sanctum\PersonalAccessToken;
+    public function findToken(string $token): ?object;
 }

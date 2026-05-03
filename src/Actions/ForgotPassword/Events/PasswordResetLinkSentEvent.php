@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
  * Event dispatched when a password reset link is sent.
  *
  * Listeners can be configured in config:
- * - auth-package.events.password_reset_link_sent
+ * - laravel-authentication.events.password_reset_link_sent
  *
  * Use Cases:
  * - Send password reset email

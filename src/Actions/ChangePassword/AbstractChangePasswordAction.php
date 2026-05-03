@@ -158,6 +158,6 @@ abstract class AbstractChangePasswordAction
      */
     protected function shouldRegenerateTokens(): bool
     {
-        return config('auth-package.security.revoke_tokens_on_password_change', false);
+        return config('laravel-authentication.security.revoke_tokens_on_password_change', false);
     }
 }

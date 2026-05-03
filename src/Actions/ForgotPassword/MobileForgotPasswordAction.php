@@ -62,7 +62,7 @@ class MobileForgotPasswordAction extends AbstractForgotPasswordAction
         $resetUrl = $this->generateResetUrl($resetToken, $user->email);
 
         // Use custom mobile mailable or default
-        $mailableClass = config('auth-package.email.mobile_forgot_password_mailable');
+        $mailableClass = config('laravel-authentication.email.mobile_forgot_password_mailable');
 
         if ($mailableClass && class_exists($mailableClass)) {
             Mail::to($user->email)->send(new $mailableClass($user, $resetToken, $resetUrl));
@@ -84,9 +84,9 @@ class MobileForgotPasswordAction extends AbstractForgotPasswordAction
             return;
         }
 
-        $smsService = config('auth-package.sms.service');
+        $smsService = config('laravel-authentication.sms.service');
         $message = config(
-            'auth-package.sms.forgot_password_template',
+            'laravel-authentication.sms.forgot_password_template',
             'Your password reset code is: {token}'
         );
         $message = str_replace('{token}', substr($resetToken, 0, 6), $message);
@@ -107,8 +107,8 @@ class MobileForgotPasswordAction extends AbstractForgotPasswordAction
      */
     protected function generateResetUrl(string $token, string $email): string
     {
-        $baseUrl = config('auth-package.password_reset.mobile_url', config('app.url'));
-        $route = config('auth-package.password_reset.mobile_route', '/mobile/password-reset');
+        $baseUrl = config('laravel-authentication.password_reset.mobile_url', config('app.url'));
+        $route = config('laravel-authentication.password_reset.mobile_route', '/mobile/password-reset');
 
         return sprintf(
             '%s%s?token=%s&email=%s',
@@ -124,6 +124,6 @@ class MobileForgotPasswordAction extends AbstractForgotPasswordAction
      */
     protected function getNotificationChannel(): string
     {
-        return config('auth-package.mobile.password_reset_channel', 'email');
+        return config('laravel-authentication.mobile.password_reset_channel', 'email');
     }
 }

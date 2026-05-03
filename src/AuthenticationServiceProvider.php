@@ -17,7 +17,6 @@ use Aristonis\LaravelAuthentication\Contracts\PasswordValidatorInterface;
 use Aristonis\LaravelAuthentication\Contracts\TokenServiceInterface;
 use Aristonis\LaravelAuthentication\Contracts\UserCreatorInterface;
 use Aristonis\LaravelAuthentication\Contracts\UserIdentifierInterface;
-use Aristonis\LaravelAuthentication\Identification\IdentifierFactory;
 use Aristonis\LaravelAuthentication\Identification\UserIdentifier;
 use Aristonis\LaravelAuthentication\Services\DefaultPasswordValidator;
 use Aristonis\LaravelAuthentication\Services\DefaultUserCreator;
@@ -74,8 +73,13 @@ class AuthenticationServiceProvider extends ServiceProvider
         $this->app->bind(
             UserIdentifierInterface::class,
             function ($app) {
-                $factory = new IdentifierFactory($app->make(Repository::class));
-                return $factory->create();
+                $customClass = config('laravel-authentication.identification.custom');
+
+                if ($customClass && class_exists($customClass)) {
+                    return $app->make($customClass);
+                }
+
+                return $app->make(UserIdentifier::class);
             }
         );
 
@@ -83,12 +87,12 @@ class AuthenticationServiceProvider extends ServiceProvider
         $this->app->bind(
             UserCreatorInterface::class,
             function ($app) {
-                $customClass = config('auth-package.registration.user_creator');
-                
+                $customClass = config('laravel-authentication.registration.user_creator');
+
                 if ($customClass && class_exists($customClass)) {
                     return $app->make($customClass);
                 }
-                
+
                 return $app->make(DefaultUserCreator::class);
             }
         );
@@ -97,12 +101,12 @@ class AuthenticationServiceProvider extends ServiceProvider
         $this->app->bind(
             PasswordValidatorInterface::class,
             function ($app) {
-                $customClass = config('auth-package.registration.password_validator');
-                
+                $customClass = config('laravel-authentication.registration.password_validator');
+
                 if ($customClass && class_exists($customClass)) {
                     return $app->make($customClass);
                 }
-                
+
                 return $app->make(DefaultPasswordValidator::class);
             }
         );
@@ -114,7 +118,7 @@ class AuthenticationServiceProvider extends ServiceProvider
         $config = $this->app->make('config');
 
         // UserRegisteredEvent
-        foreach ($config->get('auth-package.events.user_registered', []) as $listener) {
+        foreach ($config->get('laravel-authentication.events.user_registered', []) as $listener) {
             $events->listen(
                 UserRegisteredEvent::class,
                 $listener
@@ -122,7 +126,7 @@ class AuthenticationServiceProvider extends ServiceProvider
         }
 
         // LoginSuccessEvent
-        foreach ($config->get('auth-package.events.login_success', []) as $listener) {
+        foreach ($config->get('laravel-authentication.events.login_success', []) as $listener) {
             $events->listen(
                 LoginSuccessEvent::class,
                 $listener
@@ -130,7 +134,7 @@ class AuthenticationServiceProvider extends ServiceProvider
         }
 
         // LoginFailedEvent
-        foreach ($config->get('auth-package.events.login_failed', []) as $listener) {
+        foreach ($config->get('laravel-authentication.events.login_failed', []) as $listener) {
             $events->listen(
                 LoginFailedEvent::class,
                 $listener
@@ -138,7 +142,7 @@ class AuthenticationServiceProvider extends ServiceProvider
         }
 
         // PasswordResetLinkSentEvent
-        foreach ($config->get('auth-package.events.password_reset_link_sent', []) as $listener) {
+        foreach ($config->get('laravel-authentication.events.password_reset_link_sent', []) as $listener) {
             $events->listen(
                 PasswordResetLinkSentEvent::class,
                 $listener
@@ -146,7 +150,7 @@ class AuthenticationServiceProvider extends ServiceProvider
         }
 
         // PasswordResetEvent
-        foreach ($config->get('auth-package.events.password_reset', []) as $listener) {
+        foreach ($config->get('laravel-authentication.events.password_reset', []) as $listener) {
             $events->listen(
                 PasswordResetEvent::class,
                 $listener
@@ -154,7 +158,7 @@ class AuthenticationServiceProvider extends ServiceProvider
         }
 
         // EmailVerifiedEvent
-        foreach ($config->get('auth-package.events.email_verified', []) as $listener) {
+        foreach ($config->get('laravel-authentication.events.email_verified', []) as $listener) {
             $events->listen(
                 EmailVerifiedEvent::class,
                 $listener
@@ -162,7 +166,7 @@ class AuthenticationServiceProvider extends ServiceProvider
         }
 
         // UserLoggedOutEvent
-        foreach ($config->get('auth-package.events.user_logged_out', []) as $listener) {
+        foreach ($config->get('laravel-authentication.events.user_logged_out', []) as $listener) {
             $events->listen(
                 UserLoggedOutEvent::class,
                 $listener
@@ -170,7 +174,7 @@ class AuthenticationServiceProvider extends ServiceProvider
         }
 
         // PasswordChangedEvent
-        foreach ($config->get('auth-package.events.password_changed', []) as $listener) {
+        foreach ($config->get('laravel-authentication.events.password_changed', []) as $listener) {
             $events->listen(
                 PasswordChangedEvent::class,
                 $listener
@@ -178,7 +182,7 @@ class AuthenticationServiceProvider extends ServiceProvider
         }
 
         // TokenRefreshedEvent
-        foreach ($config->get('auth-package.events.token_refreshed', []) as $listener) {
+        foreach ($config->get('laravel-authentication.events.token_refreshed', []) as $listener) {
             $events->listen(
                 TokenRefreshedEvent::class,
                 $listener

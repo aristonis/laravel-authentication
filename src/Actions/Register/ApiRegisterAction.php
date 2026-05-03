@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aristonis\LaravelAuthentication\Actions\Register;
 
+use Aristonis\LaravelAuthentication\Contracts\ActionInterface;
 use Illuminate\Contracts\Auth\Authenticatable;
 
 /**
@@ -17,7 +18,7 @@ use Illuminate\Contracts\Auth\Authenticatable;
  *
  * @package Aristonis\LaravelAuthentication\Actions\Register
  */
-class ApiRegisterAction extends AbstractRegisterAction
+class ApiRegisterAction extends AbstractRegisterAction implements ActionInterface
 {
     /**
      * Handle auto-login after registration.
@@ -33,7 +34,7 @@ class ApiRegisterAction extends AbstractRegisterAction
         RegisterUserDto $dto
     ): RegisterUserResult {
         // Check if auto-login is enabled
-        if (!config('auth-package.registration.auto_login', true)) {
+        if (!config('laravel-authentication.registration.auto_login', true)) {
             return new RegisterUserResult(
                 user: $user,
                 loggedIn: false,
@@ -43,8 +44,8 @@ class ApiRegisterAction extends AbstractRegisterAction
         // Create Sanctum token
         $token = $this->tokenService->createToken(
             $user,
-            config('auth-package.registration.token.name', 'registration_token'),
-            config('auth-package.registration.token.abilities', ['*'])
+            config('laravel-authentication.registration.token.name', 'registration_token'),
+            config('laravel-authentication.registration.token.abilities', ['*'])
         );
 
         $meta = [
@@ -53,7 +54,7 @@ class ApiRegisterAction extends AbstractRegisterAction
         ];
 
         // Add expiration if configured
-        $expirationDays = config('auth-package.registration.token.expiration_days', 0);
+        $expirationDays = config('laravel-authentication.registration.token.expiration_days', 0);
         if ($expirationDays > 0) {
             $meta['expires_at'] = now()->addDays($expirationDays)->toIso8601String();
         }
@@ -63,5 +64,15 @@ class ApiRegisterAction extends AbstractRegisterAction
             meta: $meta,
             loggedIn: true,
         );
+    }
+
+    /**
+     * Get the action's container binding name.
+     *
+     * @return string The binding name for dependency injection
+     */
+    public static function resolveName(): string
+    {
+        return 'api.register.action';
     }
 }

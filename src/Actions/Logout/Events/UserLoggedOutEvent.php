@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
  * Event dispatched when a user logs out.
  *
  * Listeners can be configured in config:
- * - auth-package.events.user_logged_out
+ * - laravel-authentication.events.user_logged_out
  *
  * Use Cases:
  * - Log logout for security auditing

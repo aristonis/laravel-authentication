@@ -152,7 +152,7 @@ abstract class AbstractVerifyEmailAction
         }
 
         // Check expiration
-        $expiresAt = config('auth-package.email.verification_expiry_hours', 24);
+        $expiresAt = config('laravel-authentication.email.verification_expiry_hours', 24);
         // Token should be used within expiry period from user creation
         if ($user->created_at && $user->created_at->diffInHours() > $expiresAt) {
             throw new InvalidTokenException('Verification link has expired');

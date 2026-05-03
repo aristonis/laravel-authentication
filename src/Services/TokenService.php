@@ -16,11 +16,11 @@ class TokenService implements TokenServiceInterface
         ?array $abilities = null,
         ?\DateTimeInterface $expiresAt = null
     ): string {
-        $tokenName = $name ?? config('auth-package.sanctum.token_name', 'auth_token');
+        $tokenName = $name ?? config('laravel-authentication.sanctum.token_name', 'auth_token');
         
         // Use provided abilities or default from config
         if ($abilities === null) {
-            $abilities = config('auth-package.sanctum.abilities', ['*']);
+            $abilities = config('laravel-authentication.sanctum.abilities', ['*']);
         }
         
         $token = $user->createToken($tokenName, $abilities);
@@ -44,7 +44,7 @@ class TokenService implements TokenServiceInterface
         return false;
     }
 
-    public function findToken(string $token): ?PersonalAccessToken
+    public function findToken(string $token): ?object
     {
         return PersonalAccessToken::findToken($token);
     }

@@ -32,7 +32,7 @@ class DefaultPasswordValidator implements PasswordValidatorInterface
     public function validate(string $password): array
     {
         $errors = [];
-        $config = config('auth-package.password', []);
+        $config = config('laravel-authentication.password', []);
 
         // Minimum length check
         $minLength = $config['min_length'] ?? 8;

@@ -28,12 +28,13 @@ class RateLimitService
     {
         $key = $this->getRateLimitKey($type, $identifier);
         $decayMinutes = $this->getDecayMinutes($type);
-        
-        Cache::remember($key, $decayMinutes * 60, function () {
-            return 0;
-        });
-        
-        Cache::increment($key);
+
+        // Use atomic add operation to prevent race conditions
+        // If key doesn't exist, Cache::add returns true and sets initial value
+        // If key exists, Cache::add returns false and we increment existing value
+        if (!Cache::add($key, 1, $decayMinutes * 60)) {
+            Cache::increment($key);
+        }
     }
 
     /**
@@ -58,7 +59,7 @@ class RateLimitService
      */
     private function getMaxAttempts(string $type): int
     {
-        return config("auth-package.rate_limits.{$type}.max_attempts", 5);
+        return config("laravel-authentication.rate_limits.{$type}.max_attempts", 5);
     }
 
     /**
@@ -66,6 +67,6 @@ class RateLimitService
      */
     private function getDecayMinutes(string $type): int
     {
-        return config("auth-package.rate_limits.{$type}.decay_minutes", 1);
+        return config("laravel-authentication.rate_limits.{$type}.decay_minutes", 1);
     }
 }

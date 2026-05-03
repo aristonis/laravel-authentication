@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
  * Event dispatched when a user successfully registers.
  *
  * Listeners can be configured in config:
- * - auth-package.events.user_registered
+ * - laravel-authentication.events.user_registered
  *
  * Use Cases:
  * - Send welcome email

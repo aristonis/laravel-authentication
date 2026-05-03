@@ -131,8 +131,8 @@ abstract class AbstractForgotPasswordAction
      */
     protected function checkRateLimit(string $email): void
     {
-        $maxAttempts = config('auth-package.rate_limits.forgot_password.max_attempts', 5);
-        $decayMinutes = config('auth-package.rate_limits.forgot_password.decay_minutes', 60);
+        $maxAttempts = config('laravel-authentication.rate_limits.forgot_password.max_attempts', 5);
+        $decayMinutes = config('laravel-authentication.rate_limits.forgot_password.decay_minutes', 60);
 
         if ($this->rateLimitService->isRateLimited('forgot_password', $email)) {
             throw new RateLimitExceededException('Too many password reset requests');
@@ -180,7 +180,7 @@ abstract class AbstractForgotPasswordAction
         string $resetToken,
         ?int $expiresAt = null
     ): void {
-        $expiresAt = $expiresAt ?? config('auth-package.password_reset.token_expiry_minutes', 60);
+        $expiresAt = $expiresAt ?? config('laravel-authentication.password_reset.token_expiry_minutes', 60);
 
         // Use cache for token storage (more flexible than database)
         \Illuminate\Support\Facades\Cache::put(
